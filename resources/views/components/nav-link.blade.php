@@ -1,5 +1,11 @@
-@props(['active' => false])
+@props(['active'])
 
-<a {{ $attributes->merge(['class' => 'rounded-xl px-3 py-2 ring-1 ring-transparent transition focus:outline-none ' . ($active ? 'bg-gray-300 text-gray-800' : '')]) }}>
+@php
+$classes = ($active ?? false)
+    ? 'text-white px-3 py-2 text-sm font-medium cursor-pointer transition-colors duration-200 bg-gray-900 rounded-lg text-white'
+    : 'text-gray-300 hover:text-white px-3 py-2 text-sm font-medium cursor-pointer transition-colors duration-200';
+@endphp
+
+<a {{ $attributes->merge(['class' => $classes]) }}>
     {{ $slot }}
 </a>

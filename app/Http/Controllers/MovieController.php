@@ -19,7 +19,7 @@ class MovieController extends Controller
     public function index()
     {
         $movies = $this->tmdbService->getNowPlaying();
-        
+
         return view('movies.index', [
             'movies' => $movies['results']
         ]);
@@ -27,18 +27,29 @@ class MovieController extends Controller
 
     public function show($id)
     {
-        $movie = $this->tmdbService->getMovie($id);
-        
-        return view('movies.show', [
-            'movie' => $movie
+        $movie = $this->tmdbService->getMovie(id: $id);
+        $related = $this->tmdbService->getRelated(movieId: $id);
+
+        return view('show', [
+            'movie' => $movie,
+            'related' => $related['results']
+        ]);
+    }
+
+    public function movies()
+    {
+        $movies = $this->tmdbService->getPopular();
+
+        return view('movies', [
+            'movies' => $movies['results']
         ]);
     }
 
     public function search(Request $request)
     {
         $movies = $this->tmdbService->searchMovies($request->get('query'));
-        
-        return view('movies.search', [
+
+        return view('search', [
             'movies' => $movies['results']
         ]);
     }

@@ -72,6 +72,13 @@ class TMDBService
         });
     }
 
+    public function getRelated($movieId)
+    {
+        return Cache::remember("movies.related.{$movieId}", $this->cacheTime, function () use ($movieId) {
+            return $this->get("/movie/{$movieId}/similar");
+        });
+    }
+
     private function get($endpoint, array $params = [])
     {
         return Http::get("{$this->baseUrl}{$endpoint}", array_merge([

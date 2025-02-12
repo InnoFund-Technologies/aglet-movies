@@ -1,5 +1,5 @@
 <x-layout>
-    <header class="home-hero pt-12">
+    <header class="home-hero">
         <section class="h-96 relative text-white px-2 sm:px-6 lg:px-8 max-w-8xl mx-auto">
             <div class="place-self-center space-y-8 text-gray-50 pl-8 absolute top-0 ring-0 left-0 bottom-0 z-10">
                 <h1

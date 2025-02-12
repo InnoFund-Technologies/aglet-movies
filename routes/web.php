@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MovieController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -18,8 +19,12 @@ Route::get('/login', function () {
     return view('login');
 })->name('login');
 
-Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
+Route::get('/search', [SearchController::class, 'search']);
 
-Route::get('/movies/{id}', [MovieController::class, 'show'])->name('movies.show');
+Route::get('/movies', [MovieController::class, 'movies'])->name('movies');
 
-Route::get('/movies/search', [MovieController::class, 'search'])->name('movies.search');
+Route::get('/watchlist', [MovieController::class, 'movies'])->name('watchlist');
+
+Route::get('/tv-shows', [MovieController::class, 'movies'])->name('tv-shows');
+
+Route::get('/movies/{id}', [MovieController::class, 'show'])->name('show');

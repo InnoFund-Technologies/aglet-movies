@@ -1,6 +1,6 @@
 <x-layout>
     <div class="font-[sans-serif]">
-        <div class="min-h-screen flex flex-col items-center justify-center py-6 px-4">
+        <div class="flex flex-col items-center justify-center pb-6 pt-14 px-4">
             <div class="max-w-md w-full">
                 <div class="p-8 rounded-3xl bg-gray-800 shadow">
                     <h2 class="text-gray-200 text-center text-2xl font-bold">Sign in</h2>

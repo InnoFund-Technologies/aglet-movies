@@ -9,9 +9,9 @@ use Carbon\Carbon;
         alt="{{ $movie['title'] }}"
         src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}"
         class="absolute inset-0 h-full w-full object-cover transition-all duration-500" />
-    <div class="relative bg-gradient-to-t from-gray-900/95 to-gray-900/5 pt-32 sm:pt-48 lg:pt-56 transition-all duration-500 hover:bg-gray-900/40">
-        <a href="{{ route('movies.show', $movie['title']) }}">
-            <div class="p-4 sm:p-6">
+    <div class="relative bg-gradient-to-t from-gray-900/95 to-gray-900/5 transition-all duration-500 h-full hover:bg-gray-900/40">
+        <a href="{{ route('show', $movie['id']) }}" class="absolute bottom-0 left-0 right-0 top-0 h-full">
+            <div class="p-4 sm:p-6 h-full flex flex-col justify-end z-10">
                 <div class="text-sm text-gray-300 mt-2 flex items-center gap-2">
                     <span class="bg-[#FF2D20] text-white px-2 py-1 rounded-full text-xs">
                         {{ number_format($movie['vote_average'], 1) }} ★

@@ -7,9 +7,11 @@
         </svg>
         {{ $title }}
     </h2>
-    @foreach($movies as $movie)
-    <div class="col-span-6 sm:col-span-4 md:col-span-3 lg:col-span-2 flex flex-grow justify-center md:justify-start">
-        <x-movie-card :movie="$movie" />
+    <div class="grid grid-cols-12 sm:grid-col-11 xl:grid-cols-10 gap-6 mt-8">
+        @foreach($movies as $movie)
+        <div class="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-2 flex flex-grow justify-center md:justify-start">
+            <x-movie-card :movie="$movie" />
+        </div>
+        @endforeach
     </div>
-    @endforeach
 </section>
