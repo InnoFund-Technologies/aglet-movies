@@ -75,14 +75,11 @@
              </select>
          </div>
      </div>
-     <div class="col-span-2">
+     <div class="col-span-2 flex items-end pb-1.5">
          <button
              type="submit"
              class="bg-red-600 hover:bg-red-700 rounded-lg ext-white px-3 py-2 text-sm font-medium cursor-pointer transition-colors duration-200 text-white">
              Filter
-         </button>
-         <button type="button" class="col-span-2">
-             Reset Filters
-         </button>
+         </button> 
      </div>
  </form>

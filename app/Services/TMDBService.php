@@ -87,9 +87,9 @@ class TMDBService
         ], $params))->json();
     }
 
-    public function getFilteredMovies(array $filters)
+    public function getFilteredMovies(array $filters, int $page = 1)
     {
-        $params = [];
+        $params = ['page' => $page];
 
         // Genre Filter
         if (!empty($filters['category'])) {
@@ -132,7 +132,6 @@ class TMDBService
 
     private function getGenreId(string $categoryName): ?int
     {
-        // You should cache this mapping
         $genreMap = [
             'Action' => 28,
             'Adventure' => 12,
