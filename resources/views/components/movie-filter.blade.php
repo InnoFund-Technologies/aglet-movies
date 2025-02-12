@@ -8,7 +8,7 @@
                  id="category"
                  name="category"
                  wire:model="filters.category"
-                 class="w-full h-11 px-4 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500">
+                 class="w-full h-11 pl-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500">
                  @foreach($categories as $category)
                  <option value="{{ $category === 'All' ? '' : $category }}">{{ $category }}</option>
                  @endforeach
@@ -23,7 +23,7 @@
                  id="rating"
                  name="rating"
                  wire:model="filters.rating"
-                 class="w-full h-11 px-4 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500">
+                 class="w-full h-11 pl-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500">
                  @foreach($ratings as $rating)
                  <option value="{{ $rating === 'All' ? '' : strlen($rating) }}">{{ $rating }}</option>
                  @endforeach
@@ -38,7 +38,7 @@
                  id="year"
                  name="year"
                  wire:model="filters.year"
-                 class="w-full h-11 px-4 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500">
+                 class="w-full h-11 pl-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500">
                  @foreach($years as $year)
                  <option value="{{ $year === 'All' ? '' : $year }}">{{ $year }}</option>
                  @endforeach
@@ -53,7 +53,7 @@
                  id="sort"
                  name="sort"
                  wire:model="filters.sort"
-                 class="w-full h-11 px-4 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500">
+                 class="w-full h-11 pl-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500">
                  @foreach($sortOptions as $value => $label)
                  <option value="{{ $value }}">{{ $label }}</option>
                  @endforeach
@@ -68,7 +68,7 @@
                  id="quality"
                  name="quality"
                  wire:model="filters.quality"
-                 class="w-full h-11 px-4 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500">
+                 class="w-full h-11 pl-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-500">
                  @foreach($qualities as $quality)
                  <option value="{{ $quality === 'All' ? '' : $quality }}">{{ $quality }}</option>
                  @endforeach
