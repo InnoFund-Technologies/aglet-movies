@@ -16,12 +16,23 @@ class MovieController extends Controller
         $this->tmdbService = $tmdbService;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $movies = $this->tmdbService->getNowPlaying();
-
-        return view('movies.index', [
-            'movies' => $movies['results']
+        // For non-Livewire version
+        $filters = $request->only(['category', 'rating', 'year', 'sort', 'quality']);
+        $movies = $this->tmdbService->getFilteredMovies($filters);
+    
+        return view('movies', [
+            'movies' => $movies['results'],
+            'categories' => ['All', 'Action', 'Drama', 'Comedy', 'Horror'],
+            'ratings' => ['All', '1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+            'years' => ['All', ...range(date('Y'), 2000)],
+            'sortOptions' => [
+                'popularity.desc' => 'Popularity',
+                'vote_average.desc' => 'Rating',
+                'primary_release_date.desc' => 'Newest'
+            ],
+            'qualities' => ['All', 'HD', '4K']
         ]);
     }
 
@@ -35,15 +46,7 @@ class MovieController extends Controller
             'related' => $related['results']
         ]);
     }
-
-    public function movies()
-    {
-        $movies = $this->tmdbService->getPopular();
-
-        return view('movies', [
-            'movies' => $movies['results']
-        ]);
-    }
+ 
 
     public function search(Request $request)
     {

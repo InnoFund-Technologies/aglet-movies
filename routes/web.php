@@ -21,10 +21,10 @@ Route::get('/login', function () {
 
 Route::get('/search', [SearchController::class, 'search']);
 
-Route::get('/movies', [MovieController::class, 'movies'])->name('movies');
+Route::get('/movies', [MovieController::class, 'index'])->name('movies');
 
-Route::get('/watchlist', [MovieController::class, 'movies'])->name('watchlist');
+Route::get('/watchlist', [MovieController::class, 'index'])->name('watchlist');
 
-Route::get('/tv-shows', [MovieController::class, 'movies'])->name('tv-shows');
+Route::get('/tv-shows', [MovieController::class, 'index'])->name('tv-shows');
 
 Route::get('/movies/{id}', [MovieController::class, 'show'])->name('show');

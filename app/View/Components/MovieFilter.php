@@ -2,25 +2,41 @@
 
 namespace App\View\Components;
 
-use Closure;
-use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use App\Services\TMDBService;
 
 class MovieFilter extends Component
 {
-    /**
-     * Create a new component instance.
-     */
-    public function __construct()
-    {
-        //
-    }
+    public $filters = [
+        'category' => '',
+        'rating' => '',
+        'year' => '',
+        'sort' => 'popularity.desc',
+        'quality' => ''
+    ];
 
-    /**
-     * Get the view / contents that represent the component.
-     */
-    public function render(): View|Closure|string
+    protected $rules = [
+        'filters.category' => 'sometimes|string',
+        'filters.rating' => 'sometimes|numeric',
+        'filters.year' => 'sometimes|digits:4',
+        'filters.sort' => 'sometimes|string',
+        'filters.quality' => 'sometimes|string'
+    ];
+
+    public function render()
     {
-        return view('components.movie-filter');
+        return view('components.movie-filter', [
+            'movies' => $movies['results'] ?? [],
+            'categories' => ['All', 'Action', 'Drama', 'Comedy', 'Horror'], // Match genreMap keys
+            'ratings' => ['All', '1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+            'years' => ['All', ...range(date('Y'), 2000)],
+            'sortOptions' => [
+                'popularity.desc' => 'Popularity Desc',
+                'vote_average.desc' => 'Rating Desc',
+                'primary_release_date.desc' => 'Newest First',
+                'revenue.desc' => 'Box Office'
+            ],
+            'qualities' => ['All', 'HD', '4K']
+        ]);
     }
 }
