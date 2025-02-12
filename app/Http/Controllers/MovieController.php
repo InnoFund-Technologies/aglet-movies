@@ -18,9 +18,28 @@ class MovieController extends Controller
 
     public function index(Request $request)
     {
+        // Get the requested page, defaulting to 1
         $page = $request->get(key: 'page', default: 1);
+
+        // Get the filters from the request
         $filters = $request->only(keys: ['category', 'rating', 'year', 'sort', 'quality']);
+
+        // Get the response from the TMDB service
         $response = $this->tmdbService->getFilteredMovies(filters: $filters, page: $page);
+
+        // Check if the response is valid and contains results
+        if (!isset($response['results']) || !is_array($response['results'])) {
+            // If we're requesting a page that's too high, redirect to the last valid page
+            if (isset($response['total_pages']) && $page > $response['total_pages']) {
+                return redirect()->route('movies.index', [
+                    'page' => $response['total_pages'],
+                    ...$filters
+                ]);
+            }
+
+            // If there's some other issue, default to empty results
+            $response['results'] = [];
+        }
 
         return view(view: 'movies', data: [
             'movies' => $response['results'],
@@ -33,9 +52,9 @@ class MovieController extends Controller
                 'primary_release_date.desc' => 'Newest'
             ],
             'qualities' => ['All', 'HD', '4K'],
-            'currentPage' => $response['page'],
-            'totalPages' => $response['total_pages'],
-            'totalResults' => $response['total_results']
+            'currentPage' => $response['page'] ?? 1,
+            'totalPages' => $response['total_pages'] ?? 1,
+            'totalResults' => $response['total_results'] ?? 0
         ]);
     }
 
