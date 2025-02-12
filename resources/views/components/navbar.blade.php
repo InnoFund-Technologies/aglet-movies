@@ -12,11 +12,14 @@
                 <x-nav-link href="{{ route('home') }}" :active="request()->is('/')">
                     Home
                 </x-nav-link>
-                <x-nav-link href="{{ route('movies') }}" :active="request()->is('movies')">
+                <x-nav-link href="{{ route('movies.index') }}" :active="request()->is('movies')">
                     Movies
                 </x-nav-link>
-                <x-nav-link href="{{ route('tv-shows') }}" :active="request()->is('tv-shows')">
+                <x-nav-link href="{{ route('movies.tv-shows') }}" :active="request()->is('tv-shows')">
                     TV Shows
+                </x-nav-link>
+                <x-nav-link href="{{ route('contact.show') }}" :active="request()->is('contact.show')">
+                    Contact
                 </x-nav-link>
             </div>
 
@@ -74,10 +77,10 @@
             <x-nav-link href="{{ route('home') }}" :active="request()->is('home')" class="block">
                 Home
             </x-nav-link>
-            <x-nav-link href="{{ route('movies') }}" :active="request()->is('movies')" class="block">
+            <x-nav-link href="{{ route('movies.index') }}" :active="request()->is('movies')" class="block">
                 Movies
             </x-nav-link>
-            <x-nav-link href="{{ route('tv-shows') }}" :active="request()->is('tv-shows')" class="block">
+            <x-nav-link href="{{ route('movies.tv-shows') }}" :active="request()->is('tv-shows')" class="block">
                 TV Shows
             </x-nav-link>
             @auth

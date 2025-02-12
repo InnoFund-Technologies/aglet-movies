@@ -21,33 +21,42 @@ class MovieController extends Controller
     public function index(Request $request)
     {
         // Get the requested page, defaulting to 1
-        $page = $request->get(key: 'page', default: 1);
+        $page = $request->get('page', 1);
 
         // Get the filters from the request
-        $filters = $request->only(keys: ['category', 'rating', 'year', 'sort', 'quality']);
+        $filters = $request->only(['category', 'rating', 'year', 'sort', 'quality']);
 
-        // Get the response from the TMDB service
-        $response = $this->tmdbService->getFilteredMovies(filters: $filters, page: $page);
+        // Determine the current route name
+        $routeName = $request->route()->getName();
+
+        $isTvShows = $routeName === 'movies.tv-shows';
+
+        // Fetch data based on the route
+        $response = $isTvShows ?
+            $this->tmdbService->getFilteredTVShows(filters: $filters, page: $page)
+            : $this->tmdbService->getFilteredMovies(filters: $filters, page: $page);
+
 
         // Check if the response is valid and contains results
         if (!isset($response['results']) || !is_array($response['results'])) {
-            // If we're requesting a page that's too high, redirect to the last valid page
+            // Redirect to the last valid page if needed
             if (isset($response['total_pages']) && $page > $response['total_pages']) {
-                return redirect()->route('movies.index', [
+                return redirect()->route($routeName, [ // Use dynamic route name
                     'page' => $response['total_pages'],
                     ...$filters
                 ]);
             }
 
-            // If there's some other issue, default to empty results
+            // Default to empty results if there's an issue
             $response['results'] = [];
         }
 
-        return view(view: 'movies', data: [
-            'movies' => $response['results'],
+        // Pass data to the view
+        return view($isTvShows ?  'movies.tv-shows' : 'movies.index', [
+            'response' => $response['results'],
             'categories' => ['All', 'Action', 'Drama', 'Comedy', 'Horror'],
             'ratings' => ['All', '1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
-            'years' => ['All', ...range(start: date(format: 'Y'), end: 2000)],
+            'years' => ['All', ...range(date('Y'), 2000)],
             'sortOptions' => [
                 'popularity.desc' => 'Popularity',
                 'vote_average.desc' => 'Rating',
@@ -56,11 +65,11 @@ class MovieController extends Controller
             'qualities' => ['All', 'HD', '4K'],
             'currentPage' => $response['page'] ?? 1,
             'totalPages' => $response['total_pages'] ?? 1,
-            'totalResults' => $response['total_results'] ?? 0
+            'totalResults' => $response['total_results'] ?? 0,
         ]);
     }
 
-    public function show($id)
+    public function showMovie($id)
     {
         $movie = $this->tmdbService->getMovie(id: $id);
         $related = $this->tmdbService->getRelated(movieId: $id);
@@ -73,8 +82,19 @@ class MovieController extends Controller
         // }
 
 
-        return view('show', [
+        return view('movies.show', [
             'movie' => $movie,
+            'related' => $related['results']
+        ]);
+    }
+
+    public function showTvSeries($id)
+    {
+        $show = $this->tmdbService->getTVShow($id);
+        $related = $this->tmdbService->getRelatedTVShows($id);
+
+        return view('tvshows.show', [
+            'show' => $show,
             'related' => $related['results']
         ]);
     }

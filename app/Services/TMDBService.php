@@ -155,4 +155,128 @@ class TMDBService
 
         return $genreMap[$categoryName] ?? null;
     }
+
+    public function getTVShow($id)
+    {
+        return $this->get("/tv/{$id}");
+    }
+
+    public function searchTVShows($query)
+    {
+        return $this->get('/search/tv', [
+            'query' => $query
+        ]);
+    }
+
+    public function getTrendingTVShows()
+    {
+        return Cache::remember('tv.trending', $this->cacheTime, function () {
+            return $this->get('/trending/tv/week');
+        });
+    }
+
+    public function getPopularTVShows()
+    {
+        return Cache::remember('tv.popular', $this->cacheTime, function () {
+            return $this->get('/tv/popular');
+        });
+    }
+
+    public function getTopRatedTVShows()
+    {
+        return Cache::remember('tv.top_rated', $this->cacheTime, function () {
+            return $this->get('/tv/top_rated');
+        });
+    }
+
+    public function getAiringToday()
+    {
+        return Cache::remember('tv.airing_today', $this->cacheTime, function () {
+            return $this->get('/tv/airing_today');
+        });
+    }
+
+    public function getOnTheAir()
+    {
+        return Cache::remember('tv.on_the_air', $this->cacheTime, function () {
+            return $this->get('/tv/on_the_air');
+        });
+    }
+
+    public function getTVShowsByGenre($genreId)
+    {
+        return Cache::remember("tv.genre.{$genreId}", $this->cacheTime, function () use ($genreId) {
+            return $this->get('/discover/tv', [
+                'with_genres' => $genreId
+            ]);
+        });
+    }
+
+    public function getRelatedTVShows($tvId)
+    {
+        return Cache::remember("tv.related.{$tvId}", $this->cacheTime, function () use ($tvId) {
+            return $this->get("/tv/{$tvId}/similar");
+        });
+    }
+
+    public function getFilteredTVShows(array $filters, int $page = 1)
+    {
+        $params = ['page' => $page];
+
+        // Genre Filter
+        if (!empty($filters['category']) && $filters['category'] !== 'All') {
+            $params['with_genres'] = $this->getTVGenreId($filters['category']);
+        }
+
+        // Year Filter
+        if (!empty($filters['year']) && $filters['year'] !== 'All') {
+            $params['first_air_date_year'] = $filters['year'];
+        }
+
+        // Rating Filter (Convert stars to vote average)
+        if (!empty($filters['rating']) && $filters['rating'] !== 'All') {
+            $starRating = (int) substr($filters['rating'], 0, 1);
+            $params['vote_average.gte'] = $starRating * 2;
+        }
+
+        // Sorting
+        if (!empty($filters['sort'])) {
+            $params['sort_by'] = $filters['sort'];
+        }
+
+        $response = $this->get('/discover/tv', $params);
+
+        // Client-side quality filtering
+        if (!empty($filters['quality']) && $filters['quality'] !== 'All') {
+            $response['results'] = array_filter($response['results'], function ($show) use ($filters) {
+                return $this->hasQuality($show, $filters['quality']);
+            });
+        }
+
+        return $response;
+    }
+
+    private function getTVGenreId(string $categoryName): ?int
+    {
+        $genreMap = [
+            'Action & Adventure' => 10759,
+            'Animation' => 16,
+            'Comedy' => 35,
+            'Crime' => 80,
+            'Documentary' => 99,
+            'Drama' => 18,
+            'Family' => 10751,
+            'Kids' => 10762,
+            'Mystery' => 9648,
+            'News' => 10763,
+            'Reality' => 10764,
+            'Sci-Fi & Fantasy' => 10765,
+            'Soap' => 10766,
+            'Talk' => 10767,
+            'War & Politics' => 10768,
+            'Western' => 37
+        ];
+
+        return $genreMap[$categoryName] ?? null;
+    }
 }

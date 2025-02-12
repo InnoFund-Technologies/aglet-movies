@@ -1,5 +1,5 @@
 <x-layout>
-    <div class="max-w-6xl max-lg:max-w-3xl mx-auto rounded-lg h-screen flex items-center">
+    <div class="max-w-6xl max-lg:max-w-3xl mx-auto rounded-lg pt-10 flex items-center">
         <div class="grid lg:grid-cols-2 items-center gap-14 sm:p-8 p-4 font-[sans-serif]">
             <div>
                 <h1 class="text-4xl font-bold text-gray-100">Get in Touch</h1>
@@ -66,20 +66,57 @@
             </div>
 
             <div class="bg-gray-800 p-6 rounded-3xl">
-                <form class="my-6  space-y-6">
-                    <input type='text' placeholder='Name'
-                        class="w-full rounded-lg py-3 px-4 bg-gray-600 text-gray-100 border-none outline-0 text-sm inset ring-1 ring-gray-600 focus:ring-[#FF2D20] hover:ring-[#FF2D20]" />
-                    <input type='email' placeholder='Email'
-                        class="w-full rounded-lg py-3 px-4 bg-gray-600 text-gray-100 border-none outline-0 text-sm inset ring-1 ring-gray-600 focus:ring-[#FF2D20] hover:ring-[#FF2D20]" />
-                    <input type='text' placeholder='Subject'
-                        class="w-full rounded-lg py-3 px-4 bg-gray-600 text-gray-100 border-none outline-0 text-sm inset ring-1 ring-gray-600 focus:ring-[#FF2D20] hover:ring-[#FF2D20]" />
-                    <textarea placeholder='Message' rows="6"
-                        class="w-full rounded-lg px-4 bg-gray-600 text-gray-100 pt-3 outline-0 text-sm inset ring-1 ring-gray-600 focus:ring-[#FF2D20] hover:ring-[#FF2D20]"></textarea>
-                    <button type='button'
-                        class="text-gray-100 bg-[#FF2D20] hover:bg-[#FF2D20e2] tracking-wide rounded-lg text-sm px-4 py-3 flex items-center justify-center w-full !mt-6">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" fill='#fff' class="mr-2" viewBox="0 0 548.244 548.244">
-                            <path fill-rule="evenodd" d="M392.19 156.054 211.268 281.667 22.032 218.58C8.823 214.168-.076 201.775 0 187.852c.077-13.923 9.078-26.24 22.338-30.498L506.15 1.549c11.5-3.697 24.123-.663 32.666 7.88 8.542 8.543 11.577 21.165 7.879 32.666L390.89 525.906c-4.258 13.26-16.575 22.261-30.498 22.338-13.923.076-26.316-8.823-30.728-22.032l-63.393-190.153z" clip-rule="evenodd" data-original="#000000" />
-                        </svg>
+                @if(session('success'))
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                    {{ session('success') }}
+                </div>
+                @endif
+
+                <form action="{{ route('contact.submit') }}" method="POST">
+                    @csrf
+
+                    <div class="mb-4">
+                        <label for="email" class="text-gray-400 text-sm mb-2 block">Name</label>
+                        <input type="text" name="name" id="name" value="{{ old('name') }}"
+                            class="w-full rounded-lg py-3 px-4 bg-gray-600 text-gray-100 border-none outline-0 text-sm inset ring-1 ring-gray-600 focus:ring-[#FF2D20] hover:ring-[#FF2D20]"
+                            required>
+                        @error('name')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="email" class="text-gray-400 text-sm mb-2 block">Email</label>
+                        <input type="email" name="email" id="email" value="{{ old('email') }}"
+                            class="w-full rounded-lg py-3 px-4 bg-gray-600 text-gray-100 border-none outline-0 text-sm inset ring-1 ring-gray-600 focus:ring-[#FF2D20] hover:ring-[#FF2D20]"
+                            required>
+                        @error('email')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="email" class="text-gray-400 text-sm mb-2 block">Subject</label>
+                        <input type="text" name="subject" id="subject" value="{{ old('subject') }}"
+                            class="w-full rounded-lg py-3 px-4 bg-gray-600 text-gray-100 border-none outline-0 text-sm inset ring-1 ring-gray-600 focus:ring-[#FF2D20] hover:ring-[#FF2D20]"
+                            required>
+                        @error('subject')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="mb-6">
+                        <label for="email" class="text-gray-400 text-sm mb-2 block">Message</label>
+                        <textarea name="message" id="message" rows="5"
+                            class="w-full rounded-lg py-3 px-4 bg-gray-600 text-gray-100 border-none outline-0 text-sm inset ring-1 ring-gray-600 focus:ring-[#FF2D20] hover:ring-[#FF2D20]"
+                            required>{{ old('message') }}</textarea>
+                        @error('message')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <button type="submit"
+                        class="bg-red-600 hover:bg-red-700 w-52 block mx-auto rounded-lg text-white px-3 py-2 text-sm font-medium cursor-pointer transition-colors duration-200">
                         Send Message
                     </button>
                 </form>
