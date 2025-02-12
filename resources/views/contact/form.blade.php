@@ -77,32 +77,29 @@
 
                     <div class="mb-4">
                         <label for="email" class="text-gray-400 text-sm mb-2 block">Name</label>
-                        <input type="text" name="name" id="name" value="{{ old('name') }}"
-                            class="w-full rounded-lg py-3 px-4 bg-gray-600 text-gray-100 border-none outline-0 text-sm inset ring-1 ring-gray-600 focus:ring-[#FF2D20] hover:ring-[#FF2D20]"
+                        <x-text-input type="text" name="name" id="name" value="{{ old('name') }}"
                             required>
-                        @error('name')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
+                            @error('name')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                     </div>
 
                     <div class="mb-4">
                         <label for="email" class="text-gray-400 text-sm mb-2 block">Email</label>
-                        <input type="email" name="email" id="email" value="{{ old('email') }}"
-                            class="w-full rounded-lg py-3 px-4 bg-gray-600 text-gray-100 border-none outline-0 text-sm inset ring-1 ring-gray-600 focus:ring-[#FF2D20] hover:ring-[#FF2D20]"
+                        <x-text-input type="email" name="email" id="email" value="{{ old('email') }}"
                             required>
-                        @error('email')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
+                            @error('email')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                     </div>
 
                     <div class="mb-4">
                         <label for="email" class="text-gray-400 text-sm mb-2 block">Subject</label>
-                        <input type="text" name="subject" id="subject" value="{{ old('subject') }}"
-                            class="w-full rounded-lg py-3 px-4 bg-gray-600 text-gray-100 border-none outline-0 text-sm inset ring-1 ring-gray-600 focus:ring-[#FF2D20] hover:ring-[#FF2D20]"
+                        <x-text-input type="text" name="subject" id="subject" value="{{ old('subject') }}"
                             required>
-                        @error('subject')
-                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                        @enderror
+                            @error('subject')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
                     </div>
 
                     <div class="mb-6">
@@ -115,10 +112,9 @@
                         @enderror
                     </div>
 
-                    <button type="submit"
-                        class="bg-red-600 hover:bg-red-700 w-52 block mx-auto rounded-lg text-white px-3 py-2 text-sm font-medium cursor-pointer transition-colors duration-200">
+                    <x-primary-button type="submit">
                         Send Message
-                    </button>
+                    </x-primary-button>
                 </form>
             </div>
         </div>

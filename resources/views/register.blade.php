@@ -9,34 +9,34 @@
                 <div class="grid sm:grid-cols-2 gap-6">
                     <div>
                         <label class="text-gray-400 text-sm mb-2 block font-medium">First Name</label>
-                        <input name="name" type="text" class="w-full rounded-lg py-3 px-4 bg-gray-600 text-gray-100 border-none outline-0 text-sm inset ring-1 ring-gray-600 focus:ring-[#FF2D20] hover:ring-[#FF2D20]" placeholder="Enter name" />
+                        <x-text-input name="name" type="text" placeholder="Enter name" />
                     </div>
                     <div>
                         <label class="text-gray-400 text-sm mb-2 block font-medium">Last Name</label>
-                        <input name="lname" type="text" class="w-full rounded-lg py-3 px-4 bg-gray-600 text-gray-100 border-none outline-0 text-sm inset ring-1 ring-gray-600 focus:ring-[#FF2D20] hover:ring-[#FF2D20]" placeholder="Enter last name" />
+                        <x-text-input name="lname" type="text" placeholder="Enter last name" />
                     </div>
                     <div>
                         <label class="text-gray-400 text-sm mb-2 block font-medium">Email Id</label>
-                        <input name="email" type="text" class="w-full rounded-lg py-3 px-4 bg-gray-600 text-gray-100 border-none outline-0 text-sm inset ring-1 ring-gray-600 focus:ring-[#FF2D20] hover:ring-[#FF2D20]" placeholder="Enter email" />
+                        <x-text-input name="email" type="text" placeholder="Enter email" />
                     </div>
                     <div>
                         <label class="text-gray-400 text-sm mb-2 block font-medium">Mobile No.</label>
-                        <input name="number" type="number" class="w-full rounded-lg py-3 px-4 bg-gray-600 text-gray-100 border-none outline-0 text-sm inset ring-1 ring-gray-600 focus:ring-[#FF2D20] hover:ring-[#FF2D20]" placeholder="Enter mobile number" />
+                        <x-text-input name="number" type="number" placeholder="Enter mobile number" />
                     </div>
                     <div>
                         <label class="text-gray-400 text-sm mb-2 block font-medium">Password</label>
-                        <input name="password" type="password" class="w-full rounded-lg py-3 px-4 bg-gray-600 text-gray-100 border-none outline-0 text-sm inset ring-1 ring-gray-600 focus:ring-[#FF2D20] hover:ring-[#FF2D20]" placeholder="Enter password" />
+                        <x-text-input name="password" type="password" placeholder="Enter password" />
                     </div>
                     <div>
                         <label class="text-gray-400 text-sm mb-2 block font-medium">Confirm Password</label>
-                        <input name="cpassword" type="password" class="w-full rounded-lg py-3 px-4 bg-gray-600 text-gray-100 border-none outline-0 text-sm inset ring-1 ring-gray-600 focus:ring-[#FF2D20] hover:ring-[#FF2D20]" placeholder="Enter confirm password" />
+                        <x-text-input name="cpassword" type="password" placeholder="Enter confirm password" />
                     </div>
                 </div>
 
-                <div class="mt-8">
-                    <button type="button" class="block w-44 mx-auto py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-[#FF2D20] hover:bg-[#FF2D20] focus:outline-none">
+                <div class="mt-8 text-center">
+                    <x-primary-button class="w-1/4">
                         Sign up
-                    </button>
+                    </x-primary-button>
                 </div>
             </form>
         </div>
