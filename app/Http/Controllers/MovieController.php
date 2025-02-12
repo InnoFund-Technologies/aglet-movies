@@ -29,7 +29,7 @@ class MovieController extends Controller
         // Determine the current route name
         $routeName = $request->route()->getName();
 
-        $isTvShows = $routeName === 'movies.tv-shows';
+        $isTvShows = $routeName === 'tv-shows.index';
 
         // Fetch data based on the route
         $response = $isTvShows ?
@@ -52,7 +52,7 @@ class MovieController extends Controller
         }
 
         // Pass data to the view
-        return view($isTvShows ?  'movies.tv-shows' : 'movies.index', [
+        return view($isTvShows ?  'tv-shows.index' : 'movies.index', [
             'response' => $response['results'],
             'categories' => ['All', 'Action', 'Drama', 'Comedy', 'Horror'],
             'ratings' => ['All', '1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
@@ -88,13 +88,13 @@ class MovieController extends Controller
         ]);
     }
 
-    public function showTvSeries($id)
+    public function showTvShow($id)
     {
         $show = $this->tmdbService->getTVShow($id);
         $related = $this->tmdbService->getRelatedTVShows($id);
 
-        return view('tvshows.show', [
-            'show' => $show,
+        return view('tv-shows.show', [
+            'tvShow' => $show,
             'related' => $related['results']
         ]);
     }

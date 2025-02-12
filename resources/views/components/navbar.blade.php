@@ -15,7 +15,7 @@
                 <x-nav-link href="{{ route('movies.index') }}" :active="request()->is('movies')">
                     Movies
                 </x-nav-link>
-                <x-nav-link href="{{ route('movies.tv-shows') }}" :active="request()->is('tv-shows')">
+                <x-nav-link href="{{ route('tv-shows.index') }}" :active="request()->is('tv-shows')">
                     TV Shows
                 </x-nav-link>
                 <x-nav-link href="{{ route('contact.show') }}" :active="request()->is('contact.show')">
@@ -80,7 +80,7 @@
             <x-nav-link href="{{ route('movies.index') }}" :active="request()->is('movies')" class="block">
                 Movies
             </x-nav-link>
-            <x-nav-link href="{{ route('movies.tv-shows') }}" :active="request()->is('tv-shows')" class="block">
+            <x-nav-link href="{{ route('tv-shows.index') }}" :active="request()->is('tv-shows')" class="block">
                 TV Shows
             </x-nav-link>
             @auth

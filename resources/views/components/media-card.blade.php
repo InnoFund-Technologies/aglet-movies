@@ -5,7 +5,7 @@ use Carbon\Carbon;
 // Handle both movie and TV show data
 $title = $media['title'] ?? $media['name'] ?? '';
 $releaseDate = $media['release_date'] ?? $media['first_air_date'] ?? '';
-$route = isset($media['first_air_date']) ? 'movies.tv-shows' : 'movies.show';
+$route = isset($media['first_air_date']) ? 'tv-shows.show' : 'movies.show';
 @endphp 
 
 <article class="relative overflow-hidden rounded-3xl shadow-sm transition-all duration-200 hover:scale-105 bg-gray-800 cursor-pointer hover:shadow-lg h-80 min-w-64">

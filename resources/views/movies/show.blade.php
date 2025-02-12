@@ -94,7 +94,7 @@
                     <!-- Example of how to structure each related movie card -->
                     @foreach($related as $relateMovie)
                     <div class="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 flex flex-grow justify-center md:justify-start">
-                        <x-movie-card :movie="$relateMovie" />
+                        <x-media-card :media="$relateMovie" />
                     </div>
                     @endforeach
                 </div>
