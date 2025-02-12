@@ -19,6 +19,7 @@
 <body class="font-sans antialiased text-gray-100 bg-gray-900">
     <x-navbar />
     {{ $slot }}
+    <x-footer />
 </body>
 
 </html>
