@@ -6,6 +6,8 @@ namespace App\Http\Controllers;
 use App\Services\TMDBService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Models\UserMovieInteraction;
 
 class MovieController extends Controller
 {
@@ -62,6 +64,14 @@ class MovieController extends Controller
     {
         $movie = $this->tmdbService->getMovie(id: $id);
         $related = $this->tmdbService->getRelated(movieId: $id);
+
+        // $userInteraction = null;
+        // if (auth()->check()) {
+        //     $userInteraction = UserMovieInteraction::where('user_id', auth()->id())
+        //         ->where('movie_id', $id)
+        //         ->first();
+        // }
+
 
         return view('show', [
             'movie' => $movie,

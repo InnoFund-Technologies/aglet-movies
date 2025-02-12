@@ -1,10 +1,10 @@
 @php
 use Carbon\Carbon;
-@endphp
+@endphp 
 
 @props(['movie'])
 
-<article class="relative overflow-hidden rounded-3xl shadow-sm transition-all duration-200 hover:scale-105 cursor-pointer hover:shadow-lg h-80 min-w-64">
+<article class="relative overflow-hidden rounded-3xl shadow-sm transition-all duration-200 hover:scale-105 bg-gray-800 cursor-pointer hover:shadow-lg h-80 min-w-64">
     <img
         alt="{{ $movie['title'] }}"
         src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] }}"
