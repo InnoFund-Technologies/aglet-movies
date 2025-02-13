@@ -62,37 +62,4 @@ class MovieController extends Controller
             'movie' => $movie,
         ]);
     }
-
-    public function show($id): JsonResponse
-    {
-        $movie = $this->tmdbService->getMovie($id);
-        return response()->json($movie);
-    }
-
-    public function addToFavourites(Request $request)
-    {
-        if (empty($request->user())) {
-            $request->session()->put('url.intended', '/');
-            return response()->json([
-                'status' => 'redirect',
-                'url' => route('login')
-            ]);
-        }
-
-        $validated = $request->validate([
-            'id' => 'required|numeric',
-        ]);
-
-        $favourites = Favourites::updateOrCreate(
-            [
-                'user_id' => Auth::id(),
-                'movie_id' => $validated['id'],
-            ],
-        );
-
-        return response()->json([
-            'status' => 'success',
-            'favourites' => $favourites
-        ]);
-    }
 }

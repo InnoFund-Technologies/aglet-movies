@@ -16,7 +16,7 @@ Route::get('/favourites/{id}', [MovieController::class, 'showMovie'])->name('fav
 
 Route::get('/favourites', [FavouritesController::class, 'index'])->name('favourites.index');
 
-Route::post('/favourites', [MovieController::class, 'addToFavourites']);
+Route::post('/favourites', [FavouritesController::class, 'addToFavourites'])->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

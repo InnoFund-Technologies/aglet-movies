@@ -1,23 +1,42 @@
 import "./bootstrap";
-import "./modal";
 
 import Alpine from "alpinejs";
 
 window.Alpine = Alpine;
 
-Alpine.start();
+document.addEventListener("alpine:init", () => {
+    Alpine.data("favorites", () => ({
+        loading: false,
+        isFavorited: false,
 
-// Create a global Alpine store for modal state
-Alpine.store('modal', {
-    movieId: null
+        async addToFavourites(id) {
+            if (this.loading) return;
+
+            this.loading = true;
+
+            try {
+                const res = await window.axios.post("/favourites", { id });
+
+                const resData = await res.data
+
+                if (resData.status === "redirect") {
+                    window.location.assign(resData.url);
+                }
+
+                if (resData.status === "success") {
+                    this.isFavorited = resData.favorited;
+                }
+            } catch (error) {
+                console.error("Error updating favorites:", error);
+                this.$dispatch("notify", {
+                    message: "Failed to update favorites",
+                    type: "error",
+                });
+            } finally {
+                this.loading = false;
+            }
+        },
+    }));
 });
 
-window.addToFavourites = async function (id) {
-    const res = await window.axios.post("/favourites", { id });
-
-    const data = await res.data;
-
-    if (data.status === "redirect") {
-        window.location.assign(data.url);
-    }
-};
+Alpine.start();

@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Favourites;
+use Illuminate\Support\Facades\Auth;
 use App\Services\TMDBService;
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Http\Request; 
 
-class FavouritesController extends Controller implements HasMiddleware
+class FavouritesController extends Controller
 {
     private TMDBService $tmdbService;
 
-    public static function middleware(){
+    public static function middleware()
+    {
         return ["auth"];
     }
 
@@ -33,14 +35,41 @@ class FavouritesController extends Controller implements HasMiddleware
         $favourite_ids = $request->user()->favourites()->pluck('movie_id')->toArray();
 
         // Fetch data based on the route
-        $response =  $this->tmdbService->getFavourites($favourite_ids, $page);    
+        $response =  $this->tmdbService->getFavourites($favourite_ids, $page);
 
         // Pass data to the view
-        return view($isTvShows ?  'favourites.index' : 'home', [
-            'response' => $response['results'], 
+        return view('favourites.index', [
+            'response' => $response['results'],
             'currentPage' => $response['page'] ?? 1,
             'totalPages' => $response['total_pages'] ?? 1,
             'totalResults' => $response['total_results'] ?? 0,
         ]);
     }
+    
+    public function addToFavourites(Request $request)
+    {
+        if (empty($request->user())) {
+            $request->session()->put('url.intended', '/');
+            return response()->json([
+                'status' => 'redirect',
+                'url' => route('login')
+            ]);
+        }
+
+        $validated = $request->validate([
+            'id' => 'required|numeric',
+        ]);
+
+        $favourites = Favourites::updateOrCreate(
+            [
+                'user_id' => Auth::id(),
+                'movie_id' => $validated['id'],
+            ],
+        );
+
+        return response()->json([
+            'status' => 'success',
+            'favourites' => $favourites
+        ]);
+    } 
 }
