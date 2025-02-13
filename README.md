@@ -27,6 +27,7 @@ Clone the repository to your local machine:
 ```bash
 git clone https://github.com/BrendonChirume/aglet-movies.git
 cd aglet-movies
+```
 
 ### Step 2: Install Dependencies
 Install PHP dependencies using Composer:
