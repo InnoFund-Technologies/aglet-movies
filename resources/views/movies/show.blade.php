@@ -83,27 +83,6 @@
                 </div>
             </div>
         </div>
-        <!-- Related Movies Section -->
-        <div class="mt-12 max-w-7xl w-full mx-auto">
-            <h2 class="text-2xl font-bold text-gray-100 mb-6">You may also like</h2>
-
-            <!-- Scrollable Container for Related Movies -->
-            <div class="relative">
-                <!-- Gradient Fade Effect for Scroll Indication -->
-                <div class="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-gray-900 to-transparent z-10"></div>
-
-                <!-- Horizontal Scrolling Grid -->
-                <div class="grid grid-cols-12 gap-6">
-                    <!-- Example of how to structure each related movie card -->
-                    @foreach($related as $relateMovie)
-                    <div class="col-span-12 sm:col-span-6 md:col-span-4 lg:col-span-3 xl:col-span-3 flex flex-grow justify-center md:justify-start">
-                        <x-media-card :media="$relateMovie" />
-                    </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-
-
+        
     </div>
 </x-app-layout>

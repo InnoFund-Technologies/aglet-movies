@@ -33,5 +33,4 @@
             :total-results="$totalResults"
             :base-url="request()->url()" />
     </div>
-
 </x-app-layout>
