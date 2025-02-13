@@ -25,12 +25,13 @@
         </div>
 
     </x-slot>
-    <div>
-        <x-movie-section title="Trending Now" :movies="$trending" />
-        <x-movie-section title="Popular Movies" :movies="$popular" />
-        <x-movie-section title="Coming Soon" :movies="$upcoming" />
-        <x-movie-section title="Now Playing" :movies="$nowPlaying" />
-        <x-movie-section title="Top Rated" :movies="$topRated" />
+    <div class="space-y-8">
+        <x-movie-section title="Movies" :movies="$response" />
+        <x-movie-pagination
+            :current-page="$currentPage"
+            :total-pages="$totalPages"
+            :total-results="$totalResults"
+            :base-url="request()->url()" />
     </div>
 
 </x-app-layout>

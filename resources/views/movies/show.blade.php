@@ -16,7 +16,7 @@
                     <div class="mb-4">
                         <div class="flex justify-between items-center">
                             <h2 class="text-2xl sm:text-3xl font-bold">{{ $movie['title'] }}</h2>
-                            {{-- <x-movie-actions :movie="$movie" :isInWatchlist="$isInWatchlist" /> --}}
+                           
                         </div>
                         <p class="text-gray-400 mt-1">{{ \Carbon\Carbon::parse($movie['release_date'])->format('Y') }}</p>
                     </div>

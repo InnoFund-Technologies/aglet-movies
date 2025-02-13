@@ -35,9 +35,13 @@
                     </div>
                     <div>
                         <x-input-label class="font-medium">
-                            Message
+                            Social media links
                         </x-input-label>
-                        <textarea required name="message" class="px-4 py-2.5 text-gray-100 rounded-lg bg-gray-700 border-gray-600 focus:border-blue-400 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-300 w-full">
+                        <span class="text-gray-400 text-sm block mb-2">Enter your comma (,) separated social media links</span>
+                        <textarea
+                            required
+                            name="message" 
+                            class="px-4 py-2.5 text-gray-100 placeholder:text-gray-100 rounded-lg bg-gray-700 border-gray-600 focus:border-blue-400 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-300 w-full">
                         {{ old('message') }}
                         </textarea>
                         <x-input-error :messages="$errors->get('message')" class="mt-2" />

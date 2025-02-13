@@ -1,4 +1,4 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex items-center justify-between px-4 py-3 sm:px-6">
         {{-- Mobile view --}}
         <div class="flex flex-1 justify-between sm:hidden">

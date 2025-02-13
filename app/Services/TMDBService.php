@@ -7,13 +7,16 @@ use Illuminate\Support\Facades\Cache;
 
 class TMDBService
 {
-    private string $baseUrl = 'https://api.themoviedb.org/3';
+    private string $baseUrl;
     private string $apiKey;
     private int $cacheTime = 3600; // Cache for 1 hour
+    private int $itemsPerPage = 9; // Display 9 movies per page
+    private int $totalMovies = 45; // Total movies to display
 
     public function __construct()
     {
         $this->apiKey = config('services.tmdb.key');
+        $this->baseUrl = config('services.tmdb.url');
     }
 
     public function getMovie($id)
@@ -28,47 +31,44 @@ class TMDBService
         ]);
     }
 
-    public function getTrending()
+    public function getPaginatedMovies($endpoint, array $params = [], int $page = 1)
     {
-        return Cache::remember('movies.trending', $this->cacheTime, function () {
-            return $this->get('/trending/movie/week');
-        });
+        // Calculate the TMDB API page needed based on our custom pagination
+        $tmdbPage = ceil(($page * $this->itemsPerPage) / 20); // TMDB provides 20 results per page
+        $params['page'] = $tmdbPage;
+
+        // Get results from TMDB
+        $response = $this->get($endpoint, $params);
+        $allResults = $response['results'];
+
+        // If we need more results to fill our page
+        if (count($allResults) < $this->itemsPerPage && $response['total_pages'] > $tmdbPage) {
+            $params['page'] = $tmdbPage + 1;
+            $nextPage = $this->get($endpoint, $params);
+            $allResults = array_merge($allResults, $nextPage['results']);
+        }
+
+        // Calculate the offset for our custom pagination
+        $offset = ($page - 1) * $this->itemsPerPage % 20;
+
+        // Slice the results to get exactly 9 items
+        $paginatedResults = array_slice($allResults, $offset, $this->itemsPerPage);
+
+        // Calculate total pages based on our requirements
+        $totalPages = ceil($this->totalMovies / $this->itemsPerPage);
+
+        return [
+            'results' => $paginatedResults,
+            'page' => $page,
+            'total_pages' => $totalPages,
+            'total_results' => min($response['total_results'], $this->totalMovies)
+        ];
     }
 
-    public function getPopular()
+    public function getPopular($page = 1)
     {
-        return Cache::remember('movies.popular', $this->cacheTime, function () {
-            return $this->get('/movie/popular');
-        });
-    }
-
-    public function getUpcoming()
-    {
-        return Cache::remember('movies.upcoming', $this->cacheTime, function () {
-            return $this->get('/movie/upcoming');
-        });
-    }
-
-    public function getNowPlaying()
-    {
-        return Cache::remember('movies.now_playing', $this->cacheTime, function () {
-            return $this->get('/movie/now_playing');
-        });
-    }
-
-    public function getTopRated()
-    {
-        return Cache::remember('movies.top_rated', $this->cacheTime, function () {
-            return $this->get('/movie/top_rated');
-        });
-    }
-
-    public function getMoviesByGenre($genreId)
-    {
-        return Cache::remember("movies.genre.{$genreId}", $this->cacheTime, function () use ($genreId) {
-            return $this->get('/discover/movie', [
-                'with_genres' => $genreId
-            ]);
+        return Cache::remember("movies.popular.page{$page}", $this->cacheTime, function () use ($page) {
+            return $this->getPaginatedMovies('/movie/popular', [], $page);
         });
     }
 
@@ -89,7 +89,7 @@ class TMDBService
 
     public function getFilteredMovies(array $filters, int $page = 1)
     {
-        $params = ['page' => $page];
+        $params = [];
 
         // Genre Filter
         if (!empty($filters['category'])) {
@@ -101,7 +101,7 @@ class TMDBService
             $params['primary_release_year'] = $filters['year'];
         }
 
-        // Rating Filter (Convert stars to vote average)
+        // Rating Filter
         if (!empty($filters['rating'])) {
             $params['vote_average.gte'] = (float) $filters['rating'] * 2;
         }
@@ -111,23 +111,10 @@ class TMDBService
             $params['sort_by'] = $filters['sort'];
         }
 
-        $response = $this->get('/discover/movie', $params);
-
-        // Client-side quality filtering (example)
-        if (!empty($filters['quality'])) {
-            $response['results'] = array_filter($response['results'], function ($movie) use ($filters) {
-                return $this->hasQuality($movie, $filters['quality']);
-            });
-        }
-
-        return $response;
-    }
-
-    private function hasQuality($movie, $quality)
-    {
-        // Implement your quality check logic here
-        // This is just an example - TMDB doesn't provide quality info
-        return rand(0, 1); // Replace with real implementation
+        $cacheKey = 'movies.filtered.' . md5(serialize($filters)) . ".page{$page}";
+        return Cache::remember($cacheKey, $this->cacheTime, function () use ($params, $page) {
+            return $this->getPaginatedMovies('/discover/movie', $params, $page);
+        });
     }
 
     private function getGenreId(string $categoryName): ?int
@@ -156,60 +143,9 @@ class TMDBService
         return $genreMap[$categoryName] ?? null;
     }
 
-     public function getTVShow($id)
+    public function getTVShow($id)
     {
         return $this->get("/tv/{$id}");
-    }
-
-    public function searchTVShows($query)
-    {
-        return $this->get('/search/tv', [
-            'query' => $query
-        ]);
-    }
-
-    public function getTrendingTVShows()
-    {
-        return Cache::remember('tv.trending', $this->cacheTime, function () {
-            return $this->get('/trending/tv/week');
-        });
-    }
-
-    public function getPopularTVShows()
-    {
-        return Cache::remember('tv.popular', $this->cacheTime, function () {
-            return $this->get('/tv/popular');
-        });
-    }
-
-    public function getTopRatedTVShows()
-    {
-        return Cache::remember('tv.top_rated', $this->cacheTime, function () {
-            return $this->get('/tv/top_rated');
-        });
-    }
-
-    public function getAiringToday()
-    {
-        return Cache::remember('tv.airing_today', $this->cacheTime, function () {
-            return $this->get('/tv/airing_today');
-        });
-    }
-
-    public function getOnTheAir()
-    {
-        return Cache::remember('tv.on_the_air', $this->cacheTime, function () {
-            return $this->get('/tv/on_the_air');
-        });
-    }
-
-    public function getTVShowsByGenre($genreId)
-    {
-        return Cache::remember("tv.genre.{$genreId}", $this->cacheTime, function () use ($genreId) {
-            return $this->get('/discover/tv', [
-                'with_genres' => $genreId
-            ]);
-        });
     }
 
     public function getRelatedTVShows($tvId)
@@ -244,16 +180,10 @@ class TMDBService
             $params['sort_by'] = $filters['sort'];
         }
 
-        $response = $this->get('/discover/tv', $params);
-
-        // Client-side quality filtering
-        if (!empty($filters['quality']) && $filters['quality'] !== 'All') {
-            $response['results'] = array_filter($response['results'], function ($show) use ($filters) {
-                return $this->hasQuality($show, $filters['quality']);
-            });
-        }
-
-        return $response;
+        $cacheKey = 'tv.filtered.' . md5(serialize($filters)) . ".page{$page}";
+        return Cache::remember($cacheKey, $this->cacheTime, function () use ($params, $page) {
+            return $this->getPaginatedMovies('/discover/tv', $params, $page);
+        });
     }
 
     private function getTVGenreId(string $categoryName): ?int
@@ -279,5 +209,4 @@ class TMDBService
 
         return $genreMap[$categoryName] ?? null;
     }
-
 }

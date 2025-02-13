@@ -6,43 +6,15 @@
             <div class="hidden sm:flex items-center space-x-4">
                 <x-nav-link href="{{ route('home') }}" :active="request()->is('/')">
                     Home
+                </x-nav-link> 
+                <x-nav-link href="{{ route('favourites.index') }}" :active="request()->is('favourites')">
+                    Favourites
                 </x-nav-link>
-                <x-nav-link href="{{ route('movies.index') }}" :active="request()->is('movies')">
-                    Movies
-                </x-nav-link>
-                <x-nav-link href="{{ route('tv-shows.index') }}" :active="request()->is('tv-shows')">
-                    TV Shows
-                </x-nav-link>
-
                 <x-nav-link href="{{ route('contact.create') }}" :active="request()->is('contact')">
                     Contact
                 </x-nav-link>
             </div>
-
-            {{-- Search Bar --}}
-            <div class="flex-1 max-w-lg">
-                <x-dropdown align="right" width="full" contentClasses="h-64 bg-gray-800 text-gray-50 px-4 py-3 shadow-lg ring-1 ring-gray-700 ring-opacity-60">
-                    <x-slot name="trigger">
-                        <form class="relative" @submit.prevent method="get">
-                            <div class="relative">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 absolute left-3 top-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                </svg>
-                                <input
-                                    type="text"
-                                    class="px-4 py-2.5 text-gray-50 rounded-lg pl-11 placeholder:text-gray-400 bg-gray-700 border-gray-600 focus:border-blue-400 focus:outline-none focus:ring focus:ring-opacity-40 focus:ring-blue-300 w-full"
-                                    placeholder="Search movies and TV shows..."
-                                    @input.debounce.300ms="search($event.target.value)"
-                                    @click.outside="searchResults = []">
-                            </div>
-                        </form>
-                    </x-slot>
-                    <x-slot name="content">
-                        Search Results
-                    </x-slot>
-                </x-dropdown>
-            </div>
-
+            
             {{-- User Navigation --}}
             <div class="flex items-center space-x-4">
                 @auth
@@ -111,12 +83,9 @@
                     </x-nav-link>
                     <x-nav-link href="{{ route('home') }}" :active="request()->is('home')" class="block">
                         Home
-                    </x-nav-link>
-                    <x-nav-link href="{{ route('movies.index') }}" :active="request()->is('movies')" class="block">
-                        Movies
-                    </x-nav-link>
-                    <x-nav-link href="{{ route('tv-shows.index') }}" :active="request()->is('tv-shows')" class="block">
-                        TV Shows
+                    </x-nav-link> 
+                    <x-nav-link href="{{ route('favourites.index') }}" :active="request()->is('favourites.index')" class="block">
+                        Favourites
                     </x-nav-link>
                     <!-- Authentication -->
                     <form method="POST" action="{{ route('logout') }}">
