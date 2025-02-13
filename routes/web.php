@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [HomeController::class, 'index'])->name('home');
  
 Route::get('/register', function () {
-    return view('register');
+    return view('auth.register');
 })->name('register');
 
 Route::get('/login', function () {
@@ -39,4 +39,14 @@ Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
 // Admin routes
 Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/contacts/{contact}', [ContactAdminController::class, 'show'])->name('admin.contacts.show');
+});
+
+// routes/web.php (add these routes)
+Route::middleware('auth')->group(function () { 
+    Route::post('/movies/like', [MovieController::class, 'toggleLike'])->name('movies.like');
+    Route::post('/movies/rate', [MovieController::class, 'rate'])->name('movies.rate');
+    Route::post('/movies/watchlist', [MovieController::class, 'toggleWatchlist'])->name('movies.watchlist');
+    Route::get('/watchlist', [MovieController::class, 'getWatchlist'])->name('movies.watchlist.index');
+    Route::get('/liked-movies', [MovieController::class, 'getLikedMovies'])->name('movies.liked');
+    Route::get('/rated-movies', [MovieController::class, 'getRatedMovies'])->name('movies.rated');
 });

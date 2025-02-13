@@ -156,7 +156,7 @@ class TMDBService
         return $genreMap[$categoryName] ?? null;
     }
 
-    public function getTVShow($id)
+     public function getTVShow($id)
     {
         return $this->get("/tv/{$id}");
     }
@@ -279,4 +279,5 @@ class TMDBService
 
         return $genreMap[$categoryName] ?? null;
     }
+
 }
