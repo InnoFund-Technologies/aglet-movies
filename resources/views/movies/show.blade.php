@@ -14,7 +14,10 @@
                 <div class="col-span-9 pl-6 sm:pl-12 text-gray-100">
                     <!-- Title and Release Year -->
                     <div class="mb-4">
-                        <h2 class="text-2xl sm:text-3xl font-bold">{{ $movie['title'] }}</h2>
+                        <div class="flex justify-between items-center">
+                            <h2 class="text-2xl sm:text-3xl font-bold">{{ $movie['title'] }}</h2>
+                            {{-- <x-movie-actions :movie="$movie" :isInWatchlist="$isInWatchlist" /> --}}
+                        </div>
                         <p class="text-gray-400 mt-1">{{ \Carbon\Carbon::parse($movie['release_date'])->format('Y') }}</p>
                     </div>
 

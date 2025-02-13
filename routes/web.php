@@ -28,6 +28,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::prefix('movies')->group(function () {
+        Route::post('/toggle-like', [MovieController::class, 'toggleLike'])->name('movies.toggle-like');
+        Route::post('/rate', [MovieController::class, 'rate'])->name('movies.rate');
+        Route::post('/toggle-watchlist', [MovieController::class, 'toggleWatchlist'])->name('movies.toggle-watchlist');
+        Route::get('/watchlist', [MovieController::class, 'getWatchlist'])->name('movies.watchlist');
+        Route::get('/liked', [MovieController::class, 'getLikedMovies'])->name('movies.liked');
+        Route::get('/rated', [MovieController::class, 'getRatedMovies'])->name('movies.rated');
+    });
 });
 
 require __DIR__ . '/auth.php';

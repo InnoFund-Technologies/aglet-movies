@@ -7,6 +7,7 @@ use App\Services\TMDBService;
 use Illuminate\Http\Request;
 use App\Models\UserMovieInteraction;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MovieController extends Controller
 {
@@ -86,7 +87,7 @@ class MovieController extends Controller
 
         $userInteraction = null;
         if (Auth::check()) {
-            $userInteraction = UserMovieInteraction::where('user_id', auth()->id())
+            $userInteraction = UserMovieInteraction::where('user_id', Auth::id())
                 ->where('movie_id', $id)
                 ->first();
         }
@@ -105,7 +106,7 @@ class MovieController extends Controller
 
         $userInteraction = null;
         if (Auth::check()) {
-            $userInteraction = UserMovieInteraction::where('user_id', auth()->id())
+            $userInteraction = UserMovieInteraction::where('user_id', Auth::id())
                 ->where('movie_id', $id)
                 ->where('type', 'tv')
                 ->first();
@@ -127,11 +128,11 @@ class MovieController extends Controller
 
         $interaction = UserMovieInteraction::updateOrCreate(
             [
-                'user_id' => auth()->id(),
+                'user_id' => Auth::id(),
                 'movie_id' => $validated['movie_id'],
                 'type' => $validated['type']
             ],
-            ['is_liked' => \DB::raw('NOT is_liked')]
+            ['is_liked' => DB::raw('NOT is_liked')]
         );
 
         return response()->json([
@@ -150,7 +151,7 @@ class MovieController extends Controller
 
         $interaction = UserMovieInteraction::updateOrCreate(
             [
-                'user_id' => auth()->id(),
+                'user_id' => Auth::id(),
                 'movie_id' => $validated['movie_id'],
                 'type' => $validated['type']
             ],
@@ -172,11 +173,11 @@ class MovieController extends Controller
 
         $interaction = UserMovieInteraction::updateOrCreate(
             [
-                'user_id' => auth()->id(),
+                'user_id' => Auth::id(),
                 'movie_id' => $validated['movie_id'],
                 'type' => $validated['type']
             ],
-            ['in_watchlist' => \DB::raw('NOT in_watchlist')]
+            ['in_watchlist' => DB::raw('NOT in_watchlist')]
         );
 
         return response()->json([
@@ -188,7 +189,7 @@ class MovieController extends Controller
     public function getWatchlist()
     {
         $watchlistItems = UserMovieInteraction::with('media')
-            ->where('user_id', auth()->id())
+            ->where('user_id', Auth::id())
             ->where('in_watchlist', true)
             ->get();
 
@@ -211,7 +212,7 @@ class MovieController extends Controller
 
     public function getLikedMovies()
     {
-        $likedItems = UserMovieInteraction::where('user_id', auth()->id())
+        $likedItems = UserMovieInteraction::where('user_id', Auth::id())
             ->where('is_liked', true)
             ->get();
 
@@ -234,7 +235,7 @@ class MovieController extends Controller
 
     public function getRatedMovies()
     {
-        $ratedItems = UserMovieInteraction::where('user_id', auth()->id())
+        $ratedItems = UserMovieInteraction::where('user_id', Auth::id())
             ->whereNotNull('rating')
             ->get();
 
