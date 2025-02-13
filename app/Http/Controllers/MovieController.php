@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Favourites;
 use App\Services\TMDBService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -60,6 +61,12 @@ class MovieController extends Controller
         return view('movies.show', [
             'movie' => $movie,
         ]);
+    }
+
+    public function show($id): JsonResponse
+    {
+        $movie = $this->tmdbService->getMovie($id);
+        return response()->json($movie);
     }
 
     public function addToFavourites(Request $request)

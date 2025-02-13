@@ -12,7 +12,7 @@ Route::get('/', [MovieController::class, 'index'])->name('home');
 Route::get('/contact', [ContactUsController::class, 'create'])->name('contact.create');
 Route::post('/contact', [ContactUsController::class, 'store'])->name('contact.store');
 
-Route::get('/movies/{id}', [MovieController::class, 'showMovie']);
+Route::get('/favourites/{id}', [MovieController::class, 'showMovie'])->name('favourites.show');
 
 Route::get('/favourites', [FavouritesController::class, 'index'])->name('favourites.index');
 

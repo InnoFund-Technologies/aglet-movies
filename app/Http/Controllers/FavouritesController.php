@@ -33,9 +33,7 @@ class FavouritesController extends Controller implements HasMiddleware
         $favourite_ids = $request->user()->favourites()->pluck('movie_id')->toArray();
 
         // Fetch data based on the route
-        $response =  $this->tmdbService->getFavourites($favourite_ids, $page);
-
-#    
+        $response =  $this->tmdbService->getFavourites($favourite_ids, $page);    
 
         // Pass data to the view
         return view($isTvShows ?  'favourites.index' : 'home', [

@@ -11,7 +11,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
- 
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
@@ -30,7 +30,7 @@
         <main class="max-w-8xl mx-auto px-2 sm:px-6 lg:px-8 mb-12 flex flex-col gap-8">
             {{ $slot }}
         </main> 
-        @include('layouts.footer') 
+        @include('layouts.footer')
     </div>
 </body>
 

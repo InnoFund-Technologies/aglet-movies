@@ -7,7 +7,7 @@
                 <x-nav-link href="{{ route('home') }}" :active="request()->is('/')">
                     Home
                 </x-nav-link> 
-                <x-nav-link href="{{ route('favourites.index') }}" :active="request()->is('favourites')">
+                <x-nav-link href="{{ route('favourites.index') }}" :active="request()->routeIs('favourites')">
                     Favourites
                 </x-nav-link>
                 <x-nav-link href="{{ route('contact.create') }}" :active="request()->is('contact')">
@@ -84,7 +84,7 @@
                     <x-nav-link href="{{ route('home') }}" :active="request()->is('home')" class="block">
                         Home
                     </x-nav-link> 
-                    <x-nav-link href="{{ route('favourites.index') }}" :active="request()->is('favourites.index')" class="block">
+                    <x-nav-link href="{{ route('favourites.index') }}" :active="request()->is('favourites.show')" class="block">
                         Favourites
                     </x-nav-link>
                     <!-- Authentication -->
