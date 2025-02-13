@@ -108,10 +108,6 @@ mysql -u <your_mysql_username> -p aglet_movies < aglet_movies.sql
 - **Ecosystem:** Laravel has a rich ecosystem with tools like Eloquent ORM, Blade templating, and Artisan CLI, making it ideal for building scalable web applications.
 - **Community Support:** Laravel has a large and active community, ensuring access to plenty of resources and third-party packages.
 
-### Why TMDB API?
-- **Comprehensive Data:** The TMDB API provides extensive data about movies and TV shows, including posters, ratings, and release dates.
-- **Free Tier:** The API is free to use for non-commercial projects, making it a cost-effective choice for this assessment.
-
 ### Why Alpine.js?
 - **Lightweight:** Alpine.js is a minimal JavaScript framework that adds interactivity to the UI without the overhead of larger frameworks like Vue or React.
 - **Ease of Use:** Alpine.js integrates seamlessly with Laravel Blade templates, making it ideal for small, dynamic UI components like the favourites button.
@@ -129,22 +125,6 @@ mysql -u <your_mysql_username> -p aglet_movies < aglet_movies.sql
 
 ---
 
-## Testing the Setup
-To ensure the setup process works correctly:
-1. Verify the database connection by checking if the migrations and seeders run without errors.
-2. Log in using the default credentials and test the favourites functionality.
-3. Ensure the TMDB API is returning data by browsing movies and viewing details.
-
----
-
-## Contributing
-If you'd like to contribute to this project, please follow these steps:
-1. Fork the repository.
-2. Create a new branch for your feature or bugfix.
-3. Submit a pull request with a detailed description of your changes.
-
----
-
 ## License
 This project is open-source and available under the [MIT License](LICENSE).
 
@@ -159,12 +139,3 @@ For any questions or feedback, please contact:
 ---
 
 Thank you for reviewing my project! 🚀
-```
-
-### How to Use
-1. Copy the above Markdown code.
-2. Create a new file named `README.md` in the root of your project.
-3. Paste the code into the `README.md` file.
-4. Save the file and commit it to your GitHub repository.
-
-This `README.md` file provides a clear and professional guide for setting up and understanding your project.
