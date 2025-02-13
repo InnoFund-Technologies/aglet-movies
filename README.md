@@ -1,66 +1,173 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Here’s the raw Markdown code for the `README.md` file:
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+```markdown
+# Aglet Movies - Laravel 11 Project
 
-## About Laravel
+## Overview
+This project is a web application built with **Laravel 11** that allows users to browse movies, view details, and add movies to their favourites list. It integrates with **The Movie Database (TMDB) API** to fetch movie data. The application includes user authentication, a favourites system, and a responsive UI.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
+- Browse movies and TV shows.
+- View details about movies, including ratings, release dates, and posters.
+- Add movies to a favourites list.
+- User authentication (login/logout).
+- Responsive design for seamless use on all devices.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Setup Instructions
 
-## Learning Laravel
+### Prerequisites
+Before setting up the project, ensure you have the following installed:
+- **PHP 8.2+**
+- **Composer** (for PHP dependency management)
+- **Node.js** (for frontend dependencies)
+- **MySQL** (or any other supported database)
+- **Git** (for version control)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Step 1: Clone the Repository
+Clone the repository to your local machine:
+```bash
+git clone https://github.com/BrendonChirume/aglet-movies.git
+cd aglet-movies
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Step 2: Install Dependencies
+Install PHP dependencies using Composer:
+```bash
+composer install
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Install frontend dependencies using npm:
+```bash
+npm install
+```
 
-## Laravel Sponsors
+### Step 3: Set Up Environment Variables
+1. Copy the `.env.example` file to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+2. Update the `.env` file with your database credentials and TMDB API key:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=aglet_movies
+   DB_USERNAME=<your_mysql_username>
+   DB_PASSWORD=<your_mysql_password>
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+   TMDB_API_KEY=c47a66395800638f6403e9b30d996bd0
+   TMDB_BASE_URL=https://api.themoviedb.org/3
+   ```
 
-### Premium Partners
+### Step 4: Generate Application Key
+Generate a Laravel application key:
+```bash
+php artisan key:generate
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Step 5: Run Migrations and Seeders
+Run the database migrations and seeders to set up the database:
+```bash
+php artisan migrate --seed
+```
+
+### Step 6: Start the Development Server
+Start the Laravel development server:
+```bash
+php artisan serve
+```
+
+Visit the application in your browser at `http://localhost:8000`.
+
+### Step 7: Compile Frontend Assets
+Compile the frontend assets using Vite:
+```bash
+npm run dev
+```
+
+---
+
+## Default Login Details
+Use the following credentials to log in:
+- **Email:** `jointheteam@aglet.co.za`
+- **Password:** `@TeamAglet`
+
+---
+
+## Database Dump
+A database dump (`aglet_movies.sql`) is included in the repository. You can import it into your MySQL database using the following command:
+```bash
+mysql -u <your_mysql_username> -p aglet_movies < aglet_movies.sql
+```
+
+---
+
+## Rationale and Approach
+
+### Why Laravel?
+- **Rapid Development:** Laravel provides a robust framework with built-in features like authentication, routing, and database migrations, which significantly speed up development.
+- **Ecosystem:** Laravel has a rich ecosystem with tools like Eloquent ORM, Blade templating, and Artisan CLI, making it ideal for building scalable web applications.
+- **Community Support:** Laravel has a large and active community, ensuring access to plenty of resources and third-party packages.
+
+### Why TMDB API?
+- **Comprehensive Data:** The TMDB API provides extensive data about movies and TV shows, including posters, ratings, and release dates.
+- **Free Tier:** The API is free to use for non-commercial projects, making it a cost-effective choice for this assessment.
+
+### Why Alpine.js?
+- **Lightweight:** Alpine.js is a minimal JavaScript framework that adds interactivity to the UI without the overhead of larger frameworks like Vue or React.
+- **Ease of Use:** Alpine.js integrates seamlessly with Laravel Blade templates, making it ideal for small, dynamic UI components like the favourites button.
+
+---
+
+## Project Structure
+- **Controllers:** Handle application logic and API requests.
+- **Models:** Represent database tables and relationships.
+- **Views:** Blade templates for rendering the UI.
+- **Routes:** Define application endpoints.
+- **Migrations:** Database schema definitions.
+- **Seeders:** Populate the database with initial data.
+- **Public Assets:** Compiled CSS and JavaScript files.
+
+---
+
+## Testing the Setup
+To ensure the setup process works correctly:
+1. Verify the database connection by checking if the migrations and seeders run without errors.
+2. Log in using the default credentials and test the favourites functionality.
+3. Ensure the TMDB API is returning data by browsing movies and viewing details.
+
+---
 
 ## Contributing
+If you'd like to contribute to this project, please follow these steps:
+1. Fork the repository.
+2. Create a new branch for your feature or bugfix.
+3. Submit a pull request with a detailed description of your changes.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
 
 ## License
+This project is open-source and available under the [MIT License](LICENSE).
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## Contact
+For any questions or feedback, please contact:
+- **Brendon Chirume**
+- **Email:** brendonchirume@example.com
+- **GitHub:** [BrendonChirume](https://github.com/BrendonChirume)
+
+---
+
+Thank you for reviewing my project! 🚀
+```
+
+### How to Use
+1. Copy the above Markdown code.
+2. Create a new file named `README.md` in the root of your project.
+3. Paste the code into the `README.md` file.
+4. Save the file and commit it to your GitHub repository.
+
+This `README.md` file provides a clear and professional guide for setting up and understanding your project.
