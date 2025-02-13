@@ -1,6 +1,3 @@
-Here’s the raw Markdown code for the `README.md` file:
-
-```markdown
 # Aglet Movies - Laravel 11 Project
 
 ## Overview
@@ -30,7 +27,6 @@ Clone the repository to your local machine:
 ```bash
 git clone https://github.com/BrendonChirume/aglet-movies.git
 cd aglet-movies
-```
 
 ### Step 2: Install Dependencies
 Install PHP dependencies using Composer:
