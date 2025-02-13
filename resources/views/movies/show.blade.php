@@ -1,4 +1,4 @@
-<x-layout>
+<x-app-layout>
     <div class="p-6 sm:py-12">
         <div class="bg-gray-800 rounded-lg max-w-7xl w-full mx-auto p-6 sm:p-8">
             <div class="relative min-h-96 grid grid-cols-12">
@@ -103,4 +103,4 @@
 
 
     </div>
-</x-layout>
+</x-app-layout>

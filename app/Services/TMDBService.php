@@ -79,7 +79,7 @@ class TMDBService
         });
     }
 
-    private function get($endpoint, array $params = [])
+    public function get($endpoint, array $params = [])
     {
         return Http::get("{$this->baseUrl}{$endpoint}", array_merge([
             'api_key' => $this->apiKey,

@@ -8,7 +8,7 @@ $releaseDate = $media['release_date'] ?? $media['first_air_date'] ?? '';
 $route = isset($media['first_air_date']) ? 'tv-shows.show' : 'movies.show';
 @endphp 
 
-<article class="relative overflow-hidden rounded-3xl shadow-sm transition-all duration-200 hover:scale-105 bg-gray-800 cursor-pointer hover:shadow-lg h-80 min-w-64">
+<article class="relative overflow-hidden rounded-3xl shadow-sm transition-all duration-200 hover:scale-105 bg-gray-800 cursor-pointer hover:shadow-lg h-72 md:h-80 w-full max-w-64">
     <img
         alt="{{ $title }}"
         src="https://image.tmdb.org/t/p/w500{{ $media['poster_path'] }}"

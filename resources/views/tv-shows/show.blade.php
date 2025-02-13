@@ -1,4 +1,4 @@
-<x-layout>
+<x-app-layout>
     <div class="p-6 sm:py-12">
         <div class="bg-gray-800 rounded-lg max-w-7xl w-full mx-auto p-6 sm:p-8">
             <div class="relative min-h-96 grid grid-cols-12">
@@ -12,6 +12,7 @@
 
                 <!-- TV Show Information Column -->
                 <div class="col-span-9 pl-6 sm:pl-12 text-gray-100">
+
                     <!-- Title and First Air Year -->
                     <div class="mb-4">
                         <h2 class="text-2xl sm:text-3xl font-bold">{{ $tvShow['name'] }}</h2>
@@ -86,41 +87,33 @@
                     @endif
                 </div>
             </div>
-
             <!-- Seasons and Episodes Section -->
             @if(isset($tvShow['seasons']) && count($tvShow['seasons']) > 0)
             <div class="mt-8 border-t border-gray-700 pt-8">
                 <h3 class="text-xl font-semibold text-gray-100 mb-4">Seasons</h3>
-                <div class="grid grid-cols-1 gap-4">
-                    @foreach($tvShow['seasons'] as $season)
-                    <div class="bg-gray-700/50 rounded-lg p-4">
-                        <div class="flex items-center gap-4">
-                            @if($season['poster_path'])
-                            <img 
-                                src="https://image.tmdb.org/t/p/w200{{ $season['poster_path'] }}" 
-                                alt="Season {{ $season['season_number'] }}"
-                                class="w-24 h-36 object-cover rounded-lg"
-                            />
-                            @endif
-                            <div>
-                                <h4 class="text-lg font-semibold text-gray-100">
-                                    {{ $season['name'] }}
-                                </h4>
-                                <p class="text-gray-300 text-sm">
-                                    {{ $season['episode_count'] }} Episodes • 
-                                    {{ \Carbon\Carbon::parse($season['air_date'])->format('F Y') }}
-                                </p>
-                                <p class="text-gray-400 mt-2 text-sm line-clamp-2">
-                                    {{ $season['overview'] ?: 'No overview available.' }}
-                                </p>
-                            </div>
-                        </div>
+
+                <!-- Season Select Dropdown -->
+                <div class="mb-6" x-data="seasonSelector" data-show-id="{{ $tvShow['id'] }}">
+                    <select
+                        id="seasonSelect"
+                        class="bg-gray-700 text-gray-100 rounded-lg p-2 w-full max-w-xs"
+                        @change="fetchEpisodes($event.target.value)"> 
+                        @foreach($tvShow['seasons'] as $season)
+                        <option value="{{ $season['season_number'] }}">
+                            {{ $season['name'] }} ({{ $season['episode_count'] }} Episodes)
+                        </option>
+                        @endforeach
+                    </select>
+
+                    <!-- Episodes Container -->
+                    <div id="episodesContainer" class="space-y-4 mt-6" x-html="episodes">
+                        <!-- Episodes will be loaded here dynamically -->
                     </div>
-                    @endforeach
                 </div>
             </div>
             @endif
         </div>
+
 
         <!-- Related Shows Section -->
         <div class="mt-12 max-w-7xl w-full mx-auto">
@@ -142,4 +135,55 @@
             </div>
         </div>
     </div>
-</x-layout>
+
+    @push('scripts')
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('seasonSelector', () => ({
+                episodes: '',
+
+                async fetchEpisodes(seasonNumber) {
+                    if (!seasonNumber) {
+                        this.episodes = '';
+                        return;
+                    }
+
+                    try {
+                        const showId = document.querySelector('[x-data="seasonSelector"]').dataset.showId;
+                        const response = await fetch(`/api/tv/${showId}/season/${seasonNumber}`);
+                        const data = await response.json();
+
+                        this.episodes = data.episodes.map(episode => `
+                            <div class="bg-gray-700/50 rounded-lg p-4">
+                                <div class="flex items-center gap-4">
+                                    ${episode.still_path ? `
+                                        <img 
+                                            src="https://image.tmdb.org/t/p/w300${episode.still_path}" 
+                                            alt="Episode ${episode.episode_number}"
+                                            class="w-40 h-24 object-cover rounded-lg"
+                                        />
+                                    ` : ''}
+                                    <div>
+                                        <h4 class="text-lg font-semibold text-gray-100">
+                                            ${episode.episode_number}. ${episode.name}
+                                        </h4>
+                                        <p class="text-gray-300 text-sm">
+                                            Air Date: ${new Date(episode.air_date).toLocaleDateString()}
+                                        </p>
+                                        <p class="text-gray-400 mt-2 text-sm line-clamp-2">
+                                            ${episode.overview || 'No overview available.'}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('');
+                    } catch (error) {
+                        console.error('Error fetching episodes:', error);
+                        this.episodes = '<div class="text-red-500">Error loading episodes</div>';
+                    }
+                }
+            }));
+        });
+    </script>
+    @endpush
+</x-app-layout>

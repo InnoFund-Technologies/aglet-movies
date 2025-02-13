@@ -4,18 +4,28 @@
 namespace App\Http\Controllers;
 
 use App\Services\TMDBService;
-use Illuminate\Http\Request; 
+use Illuminate\Http\Request;
 use App\Models\UserMovieInteraction;
+use Illuminate\Support\Facades\Auth;
 
 class MovieController extends Controller
 {
     private TMDBService $tmdbService;
+    public bool $isAuth;
 
     public function __construct(TMDBService $tmdbService)
     {
         $this->tmdbService = $tmdbService;
         // Apply auth middleware only to interaction methods
-        $this->middleware('auth')->only(['toggleLike', 'rate']);
+        // Apply auth middleware to protected methods
+        // $this->middleware('auth')->only([
+        //     'toggleLike',
+        //     'rate',
+        //     'toggleWatchlist',
+        //     'getWatchlist',
+        //     'getLikedMovies',
+        //     'getRatedMovies'
+        // ]);
     }
 
     public function index(Request $request)
@@ -75,7 +85,7 @@ class MovieController extends Controller
         $related = $this->tmdbService->getRelated(movieId: $id);
 
         $userInteraction = null;
-        if (auth()->check()) {
+        if (Auth::check()) {
             $userInteraction = UserMovieInteraction::where('user_id', auth()->id())
                 ->where('movie_id', $id)
                 ->first();
@@ -94,7 +104,7 @@ class MovieController extends Controller
         $related = $this->tmdbService->getRelatedTVShows($id);
 
         $userInteraction = null;
-        if (auth()->check()) {
+        if (Auth::check()) {
             $userInteraction = UserMovieInteraction::where('user_id', auth()->id())
                 ->where('movie_id', $id)
                 ->where('type', 'tv')
@@ -111,16 +121,18 @@ class MovieController extends Controller
     public function toggleLike(Request $request)
     {
         $validated = $request->validate([
-            'movie_id' => 'required|string'
+            'movie_id' => 'required|string',
+            'type' => 'required|in:movie,tv'
         ]);
 
-        $interaction = UserMovieInteraction::firstOrNew([
-            'user_id' => auth()->id(),
-            'movie_id' => $validated['movie_id']
-        ]);
-
-        $interaction->is_liked = !($interaction->is_liked ?? false);
-        $interaction->save();
+        $interaction = UserMovieInteraction::updateOrCreate(
+            [
+                'user_id' => auth()->id(),
+                'movie_id' => $validated['movie_id'],
+                'type' => $validated['type']
+            ],
+            ['is_liked' => \DB::raw('NOT is_liked')]
+        );
 
         return response()->json([
             'status' => 'success',
@@ -132,16 +144,18 @@ class MovieController extends Controller
     {
         $validated = $request->validate([
             'movie_id' => 'required|string',
+            'type' => 'required|in:movie,tv',
             'rating' => 'required|integer|between:1,5'
         ]);
 
-        $interaction = UserMovieInteraction::firstOrNew([
-            'user_id' => auth()->id(),
-            'movie_id' => $validated['movie_id']
-        ]);
-
-        $interaction->rating = $validated['rating'];
-        $interaction->save();
+        $interaction = UserMovieInteraction::updateOrCreate(
+            [
+                'user_id' => auth()->id(),
+                'movie_id' => $validated['movie_id'],
+                'type' => $validated['type']
+            ],
+            ['rating' => $validated['rating']]
+        );
 
         return response()->json([
             'status' => 'success',
@@ -152,16 +166,18 @@ class MovieController extends Controller
     public function toggleWatchlist(Request $request)
     {
         $validated = $request->validate([
-            'movie_id' => 'required|string'
+            'movie_id' => 'required|string',
+            'type' => 'required|in:movie,tv'
         ]);
 
-        $interaction = UserMovieInteraction::firstOrNew([
-            'user_id' => auth()->id(),
-            'movie_id' => $validated['movie_id']
-        ]);
-
-        $interaction->in_watchlist = !($interaction->in_watchlist ?? false);
-        $interaction->save();
+        $interaction = UserMovieInteraction::updateOrCreate(
+            [
+                'user_id' => auth()->id(),
+                'movie_id' => $validated['movie_id'],
+                'type' => $validated['type']
+            ],
+            ['in_watchlist' => \DB::raw('NOT in_watchlist')]
+        );
 
         return response()->json([
             'status' => 'success',
@@ -171,56 +187,74 @@ class MovieController extends Controller
 
     public function getWatchlist()
     {
-        $watchlistItems = UserMovieInteraction::where('user_id', auth()->id())
+        $watchlistItems = UserMovieInteraction::with('media')
+            ->where('user_id', auth()->id())
             ->where('in_watchlist', true)
-            ->get()
-            ->pluck('movie_id');
+            ->get();
 
-        $movies = [];
-        foreach ($watchlistItems as $movieId) {
-            $movies[] = $this->tmdbService->getMovie($movieId);
+        $media = [];
+        foreach ($watchlistItems as $item) {
+            try {
+                $mediaData = $item->type === 'movie' 
+                    ? $this->tmdbService->getMovie($item->movie_id)
+                    : $this->tmdbService->getTVShow($item->movie_id);
+                
+                $mediaData['type'] = $item->type;
+                $media[] = $mediaData;
+            } catch (\Exception $e) {
+                continue;
+            }
         }
 
-        return view('movies.watchlist', [
-            'movies' => $movies
-        ]);
+        return view('movies.watchlist', ['media' => $media]);
     }
 
     public function getLikedMovies()
     {
         $likedItems = UserMovieInteraction::where('user_id', auth()->id())
             ->where('is_liked', true)
-            ->get()
-            ->pluck('movie_id');
+            ->get();
 
-        $movies = [];
-        foreach ($likedItems as $movieId) {
-            $movies[] = $this->tmdbService->getMovie($movieId);
+        $media = [];
+        foreach ($likedItems as $item) {
+            try {
+                $mediaData = $item->type === 'movie' 
+                    ? $this->tmdbService->getMovie($item->movie_id)
+                    : $this->tmdbService->getTVShow($item->movie_id);
+                
+                $mediaData['type'] = $item->type;
+                $media[] = $mediaData;
+            } catch (\Exception $e) {
+                continue;
+            }
         }
 
-        return view('movies.liked', [
-            'movies' => $movies
-        ]);
+        return view('movies.liked', ['media' => $media]);
     }
 
     public function getRatedMovies()
     {
-        $ratedMovies = UserMovieInteraction::where('user_id', auth()->id())
+        $ratedItems = UserMovieInteraction::where('user_id', auth()->id())
             ->whereNotNull('rating')
             ->get();
 
-        $movies = [];
-        foreach ($ratedMovies as $interaction) {
-            $movie = $this->tmdbService->getMovie($interaction->movie_id);
-            $movie['user_rating'] = $interaction->rating;
-            $movies[] = $movie;
+        $media = [];
+        foreach ($ratedItems as $item) {
+            try {
+                $mediaData = $item->type === 'movie' 
+                    ? $this->tmdbService->getMovie($item->movie_id)
+                    : $this->tmdbService->getTVShow($item->movie_id);
+                
+                $mediaData['user_rating'] = $item->rating;
+                $mediaData['type'] = $item->type;
+                $media[] = $mediaData;
+            } catch (\Exception $e) {
+                continue;
+            }
         }
 
-        return view('movies.rated', [
-            'movies' => $movies
-        ]);
+        return view('movies.rated', ['media' => $media]);
     }
-
     public function search(Request $request)
     {
         $movies = $this->tmdbService->searchMovies($request->get('query'));
