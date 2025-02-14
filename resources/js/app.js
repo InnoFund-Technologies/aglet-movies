@@ -17,7 +17,7 @@ document.addEventListener("alpine:init", () => {
             try {
                 const res = await window.axios.post("/favourites", { id });
 
-                const resData = await res.data
+                const resData = await res.data;
 
                 if (resData.status === "redirect") {
                     window.location.assign(resData.url);
@@ -34,6 +34,41 @@ document.addEventListener("alpine:init", () => {
                 });
             } finally {
                 this.loading = false;
+            }
+        },
+    }));
+    
+    Alpine.data("searchMovies", () => ({
+        search: "",
+        searchResults: [],
+        isLoading: false,
+
+        async getSearchResults() {
+            if (this.search === "") {
+                this.searchResults = [];
+                return;
+            }
+
+            this.isLoading = true;
+  
+            try {
+                const response = await axios.get('/search-movies', {
+                    params: {
+                        query: this.search
+                    }
+                });
+                
+                // Handle the results
+                if (response.data && response.data.results) {
+                    this.searchResults = response.data.results.slice(0, 7); // Limit to 7 results
+                } else {
+                    this.searchResults = [];
+                }
+            } catch (error) {
+                console.error('Search failed:', error);
+                this.searchResults = [];
+            } finally {
+                this.isLoading = false;
             }
         },
     }));

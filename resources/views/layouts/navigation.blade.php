@@ -6,7 +6,7 @@
             <div class="hidden sm:flex items-center space-x-4">
                 <x-nav-link href="{{ route('home') }}" :active="request()->is('/')">
                     Home
-                </x-nav-link> 
+                </x-nav-link>
                 <x-nav-link href="{{ route('favourites.index') }}" :active="request()->routeIs('favourites.index')">
                     Favourites
                 </x-nav-link>
@@ -14,7 +14,10 @@
                     Contact
                 </x-nav-link>
             </div>
-            
+
+            {{-- Search Bar --}}
+             <x-search-bar/>
+
             {{-- User Navigation --}}
             <div class="flex items-center space-x-4">
                 @auth
@@ -83,7 +86,7 @@
                     </x-nav-link>
                     <x-nav-link href="{{ route('home') }}" :active="request()->is('home')" class="block">
                         Home
-                    </x-nav-link> 
+                    </x-nav-link>
                     <x-nav-link href="{{ route('favourites.index') }}" :active="request()->routeIs('favourites.index')" class="block">
                         Favourites
                     </x-nav-link>
