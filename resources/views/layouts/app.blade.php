@@ -21,7 +21,7 @@
 
         <!-- Page Heading -->
         @isset($header)
-        <header class="bg-white shadow">
+        <header>
             {{ $header }}
         </header>
         @endisset
