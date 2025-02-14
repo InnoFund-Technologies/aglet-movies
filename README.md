@@ -159,7 +159,7 @@ MySQL was selected as the database solution for the following reasons:
 For any questions or feedback, please contact:
 
 -   **Brendon Chirume**
--   **Email:** brendonchirume@example.com
+-   **Email:** tchirume14@gmail.com
 -   **GitHub:** [BrendonChirume](https://github.com/BrendonChirume)
 
 ---
