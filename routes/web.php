@@ -15,13 +15,14 @@ Route::post('/contact', [ContactUsController::class, 'store'])->name('contact.st
 
 Route::get('/movies/{id}', [MovieController::class, 'showMovie'])->name('movie.show');
 
-Route::get('/favourites', [FavouritesController::class, 'index'])->name('favourites.index');
 
-Route::post('/favourites', [FavouritesController::class, 'addToFavourites'])->middleware('auth');
+Route::post('/favourites', [FavouritesController::class, 'addToFavourites']);
 
 Route::get('/search-movies', [MovieSearchController::class, 'search']);
 
 Route::middleware('auth')->group(function () {
+    Route::get('/favourites', [FavouritesController::class, 'index'])->name('favourites.index');
+    
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

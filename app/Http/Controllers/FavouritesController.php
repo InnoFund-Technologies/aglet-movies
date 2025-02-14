@@ -11,27 +11,16 @@ class FavouritesController extends Controller
 {
     private TMDBService $tmdbService;
 
-    public static function middleware()
-    {
-        return ["auth"];
-    }
-
     public function __construct(TMDBService $tmdbService)
     {
         $this->tmdbService = $tmdbService;
     }
 
-
     public function index(Request $request)
     {
         // Get the requested page, defaulting to 1
         $page = $request->get('page', 1);
-
-        // Determine the current route name
-        $routeName = $request->route()->getName();
-
-        $isTvShows = $routeName === 'favourites.index';
-
+ 
         $favourite_ids = $request->user()->favourites()->pluck('movie_id')->toArray();
 
         // Fetch data based on the route
