@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.41, for Linux (x86_64)
 --
--- Host: localhost    Database: aglet_brief_laravel
+-- Host: localhost    Database: aglet_movies
 -- ------------------------------------------------------
 -- Server version	8.0.41-0ubuntu0.24.04.1
 
